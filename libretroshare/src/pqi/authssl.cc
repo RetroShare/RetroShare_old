@@ -331,8 +331,12 @@ static  int initLib = 0;
 	std::cerr << "SSL Library Init!" << std::endl;
 
 	// setup connection method
-	sslctx = SSL_CTX_new(TLSv1_method());
-
+	sslctx = SSL_CTX_new(SSLv23_method());
+	//SSLv23_method() enables all protocols
+	SSL_CTX_set_options(sslctx, SSL_OP_NO_SSLv3);
+	//SSL_OP_NO_SSLv3 disables SSLv3 and enables >= TLSv1
+	
+	
 	// Setup cipher lists:
 	//
 	//       std::string cipherString = "HIGH:!DSS:!aNULL:!3DES";
