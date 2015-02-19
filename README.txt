@@ -1,10 +1,11 @@
 To compile:
 
 	- install the package dependencies. On ubuntu:
-		# sudo apt-get install libglib2.0-dev libupnp-dev qt4-dev-tools libqt4-dev libssl-dev libxss-dev \
-		       libgnome-keyring-dev libbz2-dev libqt4-opengl-dev libqtmultimediakit1 qtmobility-dev      \
-			   libspeex-dev libspeexdsp-dev libxslt1-dev libprotobuf-dev protobuf-compiler cmake         \
-			   libcurl4-openssl-dev
+		# sudo apt-get install libglib2.0-dev libupnp-dev qt4-dev-tools libqt4-dev \
+				libssl-dev libxss-dev libgnome-keyring-dev libbz2-dev      \
+				libqt4-opengl-dev libqtmultimediakit1 qtmobility-dev       \
+				libspeex-dev libspeexdsp-dev libxslt1-dev libprotobuf-dev  \
+				protobuf-compiler cmake libcurl4-openssl-dev
 
 	- create project directory (e.g. ~/retroshare) and check out the source code
 		# mkdir ~/retroshare
@@ -16,18 +17,15 @@ To compile:
 	- get source code for libssh-0.5.4, unzip it, and create build directory (if needed) 
 
 		# cd lib
-		# wget https://red.libssh.org/attachments/download/41/libssh-0.5.4.tar.gz
-		# tar zxvf libssh-0.5.4.tar.gz
-		# cd libssh-0.5.4
+		# wget http://git.libssh.org/projects/libssh.git/snapshot/libssh-libssh-0.6.4.zip
+		# tar zxvf libssh-0.6.4.tar.gz
+		# cd libssh-0.6.4
 		# mkdir build
 		# cd build
-		# cmake -DWITH_STATIC_LIB=ON ..
+		# cmake -DWITH_STATIC_LIB=ON -DWITH_GSSAPI=OFF ..
 		# make
 		# cd ../../..
 
-		NB: There is a new libssh-0.6.0rc1 which fixes some bugs from v0.5.4, 
-		The procedure is the same as above, except for the following line. 
-		# cmake -DWITH_STATIC_LIB=ON -DWITH_GSSAPI=OFF ..
 
 	- get source code for sqlcipher, and build it (only needed for GXS) 
 
@@ -65,8 +63,8 @@ To compile:
 
 	- to use the SSH RS server (nogui):
 
-		# ssh-keygen -t rsa -f rs_ssh_host_rsa_key					# this makes a RSA
-		# ./retroshare-nogui -G										# generates a login+passwd hash for the RSA key used.
+		# ssh-keygen -t rsa -f rs_ssh_host_rsa_key	# this makes a RSA
+		# ./retroshare-nogui -G				# generates a login+passwd hash for the RSA key used.
 		# ./retroshare-nogui -S 7022 -U[SSLid] -P [Passwd hash]
 
 	- to connect from a remote place to the server by SSH:
