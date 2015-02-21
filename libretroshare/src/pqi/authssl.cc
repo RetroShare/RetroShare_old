@@ -333,6 +333,8 @@ static  int initLib = 0;
 	// setup connection method
 	sslctx = SSL_CTX_new(SSLv23_method());
 	SSL_CTX_set_options(sslctx,SSL_OP_NO_SSLv3) ;
+	// Always create a new key when using temporary/ephemeral DH parameters 
+	SSL_CTX_set_options(sslctx,SSL_OP_SINGLE_DH_USE);
 
 	// Setup cipher lists:
 	//
