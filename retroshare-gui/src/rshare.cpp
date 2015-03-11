@@ -120,6 +120,11 @@ Rshare::Rshare(QStringList args, int &argc, char **argv, const QString &dir)
   connect(timer, SIGNAL(timeout()), this, SLOT(blinkTimer()));
   timer->start();
 
+  timer = new QTimer(this);
+  timer->setInterval(60000);
+  connect(timer, SIGNAL(timeout()), this, SIGNAL(minuteTick()));
+  timer->start();
+
   /* Read in all our command-line arguments. */
   parseArguments(args);
 
@@ -163,9 +168,14 @@ Rshare::~Rshare()
 
 }
 
-QString Rshare::retroshareVersion()
+QString Rshare::retroshareVersion(bool withRevision)
 {
-	return QString("%1.%2.%3%4").arg(RS_MAJOR_VERSION).arg(RS_MINOR_VERSION).arg(RS_BUILD_NUMBER).arg(RS_BUILD_NUMBER_ADD);
+	QString version = QString("%1.%2.%3%4").arg(RS_MAJOR_VERSION).arg(RS_MINOR_VERSION).arg(RS_BUILD_NUMBER).arg(RS_BUILD_NUMBER_ADD);
+	if (withRevision) {
+		version += QString(" %1 %2").arg(tr("Revision")).arg(RS_REVISION_NUMBER);
+	}
+
+	return version;
 }
 
 /** Enters the main event loop and waits until exit() is called. The signal

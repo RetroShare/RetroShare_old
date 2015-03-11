@@ -38,9 +38,6 @@
 #include "util/log.h"
 #include "retroshare/rstypes.h"
 
-/** Rshare's version string */
-#define RSHARE_VERSION    "0.7"
-
 /** Pointer to this RetroShare application instance. */
 #define rApp  ((Rshare *)qApp)
 
@@ -62,7 +59,7 @@ public:
   ~Rshare();
 
   /** Return the version info */
-  static QString retroshareVersion();
+  static QString retroshareVersion(bool withRevision);
 
   /** Return the map of command-line arguments and values. */
   static QMap<QString, QString> arguments() { return _args; }
@@ -110,8 +107,6 @@ public:
   static QString style() { return _style; }
   /** Returns the current GUI stylesheet. */
   static QString stylesheet() { return _stylesheet; }
-  /** Returns Rshare's application version. */
-  static QString version() { return RSHARE_VERSION; }
   /** Returns Rshare's application startup time. */
   static QDateTime startupTime();
 
@@ -147,6 +142,8 @@ signals:
   void blink(bool on);
   /** Global timer every second */
   void secondTick();
+  /** Global timer every minute */
+  void minuteTick();
 
 private slots:
   /** Called when the application's main event loop has started. This method
