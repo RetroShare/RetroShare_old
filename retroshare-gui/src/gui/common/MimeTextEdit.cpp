@@ -32,6 +32,7 @@
 #include "gui/RetroShareLink.h"
 
 #include <retroshare/rspeers.h>
+#include <retroshare/rsversion.h>
 
 MimeTextEdit::MimeTextEdit(QWidget *parent)
     : RSTextEdit(parent), mCompleter(0)
@@ -231,6 +232,7 @@ void MimeTextEdit::contextMenuEvent(QContextMenuEvent *e)
 	contextMenu->addSeparator();
 	QAction *pasteLinkAction = contextMenu->addAction(QIcon(":/images/pasterslink.png"), tr("Paste RetroShare Link"), this, SLOT(pasteLink()));
 	contextMenu->addAction(QIcon(":/images/pasterslink.png"), tr("Paste my certificate link"), this, SLOT(pasteOwnCertificateLink()));
+	contextMenu->addAction(QIcon(":/images/pasterslink.png"), tr("Paste my Bug Reporting Info"), this, SLOT(pasteSysInfo()));
 
 	if (RSLinkClipboard::empty()) {
 		pasteLinkAction->setDisabled(true);
@@ -259,4 +261,34 @@ void MimeTextEdit::pasteOwnCertificateLink()
 	if (link.createCertificate(ownId)) {
 		insertHtml(link.toHtml() + " ");
 	}
+}
+
+void MimeTextEdit::pasteSysInfo()
+{
+	int major = RS_MAJOR_VERSION ;
+	int minor = RS_MINOR_VERSION ;
+	int build = RS_BUILD_NUMBER ;
+	int svn_rev = RS_REVISION_NUMBER ;
+	QString rsVerString;
+	rsVerString.sprintf("RetroShare Version: %i.%i (%i, %i) <br>",major, minor, build,svn_rev);
+	insertHtml(rsVerString);
+
+#if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
+	QString qtver = "QT 5.x";
+	//use QT5s nice qsysinfo class!
+#else
+	QString qtver = "QT 4.x";
+	#ifdef Q_WS_X11
+	QString OS="Linux";
+	#endif
+	#ifdef Q_WS_WIN
+	QString OS="Windows";
+	#endif
+	#ifdef Q_WS_MACX
+	QString OS="Mac";
+	#endif
+	insertHtml(OS+" ");
+#endif
+
+	insertHtml(qtver);
 }

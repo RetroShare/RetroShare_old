@@ -58,6 +58,7 @@ private slots:
 	void insertCompletion(const QString &completion);
 	void pasteLink();
 	void pasteOwnCertificateLink();
+	void pasteSysInfo();
 
 private:
 	QString textUnderCursor() const;
