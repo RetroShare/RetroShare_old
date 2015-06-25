@@ -30,9 +30,13 @@
 #include "MimeTextEdit.h"
 #include "util/HandleRichText.h"
 #include "gui/RetroShareLink.h"
+#include "rshare.h"
 
 #include <retroshare/rspeers.h>
 #include <retroshare/rsversion.h>
+#include <retroshare/rsiface.h>
+#include <retroshare/rsplugin.h>
+#include <microhttpd.h>
 
 MimeTextEdit::MimeTextEdit(QWidget *parent)
     : RSTextEdit(parent), mCompleter(0)
@@ -262,22 +266,37 @@ void MimeTextEdit::pasteOwnCertificateLink()
 		insertHtml(link.toHtml() + " ");
 	}
 }
+static void addLibraries(MimeTextEdit *mTextEdit, const std::string &name, const std::list<RsLibraryInfo> &libraries)
+{
 
+	mTextEdit->insertHtml(QString::fromUtf8(name.c_str()));
+	mTextEdit->insertHtml("<br>");
+
+	std::list<RsLibraryInfo>::const_iterator libraryIt;
+	for (libraryIt = libraries.begin(); libraryIt != libraries.end(); ++libraryIt) {;
+		mTextEdit->insertHtml(QString::fromUtf8(libraryIt->mName.c_str()));
+		mTextEdit->insertHtml("<br>");
+		mTextEdit->insertHtml(QString::fromUtf8(libraryIt->mVersion.c_str()));
+		mTextEdit->insertHtml("<br>");
+		mTextEdit->insertHtml("<br>");
+	}
+}
 void MimeTextEdit::pasteSysInfo()
 {
-	int major = RS_MAJOR_VERSION ;
+	/*int major = RS_MAJOR_VERSION ;
 	int minor = RS_MINOR_VERSION ;
 	int build = RS_BUILD_NUMBER ;
-	int svn_rev = RS_REVISION_NUMBER ;
-	QString rsVerString;
-	rsVerString.sprintf("RetroShare Version: %i.%i (%i, %i) <br>",major, minor, build,svn_rev);
+	int svn_rev = RS_REVISION_NUMBER ;*/
+	QString rsVerString = "RetroShare Version: ";
+	rsVerString+=Rshare::retroshareVersion(true);
+	//rsVerString.sprintf("RetroShare Version: %i.%i (%i, %i) <br>",major, minor, build,svn_rev);
 	insertHtml(rsVerString);
+	insertHtml("<br>");
+
 
 #if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
-	QString qtver = "QT 5.x";
-	//use QT5s nice qsysinfo class!
+	//TODO use QT5s nice qsysinfo class!
 #else
-	QString qtver = "QT 4.x";
 	#ifdef Q_WS_X11
 	QString OS="Linux";
 	#endif
@@ -290,5 +309,30 @@ void MimeTextEdit::pasteSysInfo()
 	insertHtml(OS+" ");
 #endif
 
+	QString qtver = QString("QT ")+QT_VERSION_STR;
 	insertHtml(qtver);
+	insertHtml("<br>");
+
+	/* Add version numbers of libretroshare */
+	std::list<RsLibraryInfo> libraries;
+	RsControl::instance()->getLibraries(libraries);
+	addLibraries(this, "libretroshare", libraries);
+
+	/* Add version numbers of RetroShare */
+	// Add versions here. Find a better place.
+	libraries.clear();
+	libraries.push_back(RsLibraryInfo("Libmicrohttpd", MHD_get_version()));
+	addLibraries(this, "RetroShare", libraries);
+
+	/* Add version numbers of plugins */
+	if (rsPlugins) {
+		for (int i = 0; i < rsPlugins->nbPlugins(); ++i) {
+			RsPlugin *plugin = rsPlugins->plugin(i);
+			if (plugin) {
+				libraries.clear();
+				plugin->getLibraries(libraries);
+				addLibraries(this, plugin->getPluginName(), libraries);
+			}
+		}
+	}
 }
