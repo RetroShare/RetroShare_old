@@ -275,9 +275,9 @@ static void addLibraries(MimeTextEdit *mTextEdit, const std::string &name, const
 	std::list<RsLibraryInfo>::const_iterator libraryIt;
 	for (libraryIt = libraries.begin(); libraryIt != libraries.end(); ++libraryIt) {
 
-		mTextEdit->insertHtml("-");
+		mTextEdit->insertHtml(" - ");
 		mTextEdit->insertHtml(QString::fromUtf8(libraryIt->mName.c_str()));
-		mTextEdit->insertHtml("<br>-");
+		mTextEdit->insertHtml(": ");
 		mTextEdit->insertHtml(QString::fromUtf8(libraryIt->mVersion.c_str()));
 		mTextEdit->insertHtml("<br>");
 	}
