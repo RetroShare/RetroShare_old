@@ -1,14 +1,13 @@
 ## To compile
 
 install the package dependencies. On ubuntu:
-
-      ```bash
-      sudo apt-get install libglib2.0-dev libupnp-dev qt4-dev-tools \
-      libqt4-dev libssl-dev libxss-dev libgnome-keyring-dev libbz2-dev \
-      libqt4-opengl-dev libqtmultimediakit1 qtmobility-dev \
-      libspeex-dev libspeexdsp-dev libxslt1-dev libprotobuf-dev \
-      protobuf-compiler cmake libcurl4-openssl-dev
-      ```
+ ```bash
+sudo apt-get install libglib2.0-dev libupnp-dev qt4-dev-tools \
+libqt4-dev libssl-dev libxss-dev libgnome-keyring-dev libbz2-dev \
+libqt4-opengl-dev libqtmultimediakit1 qtmobility-dev \
+libspeex-dev libspeexdsp-dev libxslt1-dev libprotobuf-dev \
+protobuf-compiler cmake libcurl4-openssl-dev
+```
 
 - create project directory (e.g. ~/retroshare) and check out the source code
    # mkdir ~/retroshare
