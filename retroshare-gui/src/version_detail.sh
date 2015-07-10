@@ -6,6 +6,8 @@
 set +e
 
 
+#alternate method from Heini
+#if [[ -c /dev/null ]]; then
 if (ls &> /dev/null); then
 	echo "Retroshare Gui version : " > gui/help/version.html
 	

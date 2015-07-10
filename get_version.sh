@@ -7,17 +7,27 @@ version=0
 vcs="unknown"
 githash="unknown"
 if ( git log -n 1 &> /dev/null); then
-	#retrieve git information - just get number of commits
-	#note - this will not match svn commits
-	#note - with caves repo - start of history is cutoff? so it is unusually small number
-	#note - should really provide hash of last git commit - this is *much* more handy for unoffical builds!
-	#where a single number is currently rather misleading
-	#though a version numer for approx human reading is nice!
+	#note - where a single number is currently rather misleading
+	#though a version numer for approx human reading is nice
 	
-	#this could still do some smart things HERE to try and pull SVN revision from logs
+	#try to try and pull SVN revision from last commit
+	cleverversion="$(git log -n 1 | awk '/svn/ {print $2}' | head -1 | sed 's/.*@//')"
+        if [ -z $cleverversion ]; then
+            #"failed to get SVN version from most recent git"
+            cleverversion="$(git log -n 10 | awk '/svn/ {print $2}' | head -1 | sed 's/.*@//')"
+        fi
+        
+	#try to try and pull SVN revision from last 10 commits
+        if [ $cleverversion ]; then
+            #"got clever version"
+            version=$cleverversion
+        fi
 	
 	#if not got a version using smart method, use easy method
         if [ $version == 0 ]; then
+            #retrieve git information - just get number of commits
+            #note - this will not match svn commits
+            #note - with caves repo - start of history is cutoff? so it is unusually small number
             version=$(git rev-list HEAD | wc -l)
         fi
 	
