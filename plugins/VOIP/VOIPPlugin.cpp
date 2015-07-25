@@ -37,9 +37,10 @@
 #include "gui/SoundManager.h"
 #include "gui/chat/ChatWidget.h"
 
+#include <speex/speex.h>
+
 #ifdef OPENCV2
 #include <opencv2/opencv.hpp>
-#include <speex/speex.h>
 #else
 #include <opencv/cv.h>
 #endif
