@@ -32,6 +32,7 @@
 #include <microhttpd.h>
 
 #include <QClipboard>
+#include <QSysInfo>
 #include <QHBoxLayout>
 #include <QPainter>
 #include <QBrush>
@@ -756,20 +757,21 @@ void AboutDialog::on_copy_button_clicked()
 
 
 #if QT_VERSION >= QT_VERSION_CHECK (5, 0, 0)
-    //TODO use QT5s nice qsysinfo class!
+	#if QT_VERSION >= QT_VERSION_CHECK (5, 4, 0)
+		verInfo+=QSysInfo::prettyProductName();
+	#endif
 #else
-    #ifdef Q_WS_X11
-    QString OS="Linux";
-    #endif
-    #ifdef Q_WS_WIN
-    QString OS="Windows";
-    #endif
-    #ifdef Q_WS_MACX
-    QString OS="Mac";
-    #endif
-    insertHtml(OS+" ");
+	#ifdef Q_WS_X11
+	verInfo+="Linux";
+	#endif
+	#ifdef Q_WS_WIN
+	verInfo+="Windows";
+	#endif
+	#ifdef Q_WS_MACX
+	verInfo+="Mac";
+	#endif
 #endif
-
+	verInfo+=" ";
     QString qtver = QString("QT ")+QT_VERSION_STR;
     verInfo+=qtver;
     verInfo+="\n\n";
