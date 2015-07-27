@@ -5,23 +5,22 @@
 #don't exit even if a command fails
 set +e
 
+
+#alternate method from Heini
+#if [[ -c /dev/null ]]; then
 if (ls &> /dev/null); then
 	echo "Retroshare Gui version : " > gui/help/version.html
-	if ( /usr/bin/git log -n 1 &> /dev/null); then
-		#retrieve git information
-		echo "Git version : $(git status | grep branch | cut -c 3-) $(git log -n 1 | grep commit)" >> gui/help/version.html
-	fi
-	if ( /usr/bin/git log -n 1 | grep svn &> /dev/null); then
-		#retrieve git svn information
-		echo "Svn version : $(git log -n 1 | awk '/svn/ {print $2}' | head -1)" >> gui/help/version.html
-	elif ( /usr/bin/git log -n 10 | grep svn &> /dev/null); then
-		#retrieve git svn information
-		echo "Svn closest version : $(git log -n 10 | awk '/svn/ {print $2}' | head -1)" >> gui/help/version.html
-	fi
+	
+		version=$(../../get_version.sh)
 
-	if ( /usr/bin/svn info &> /dev/null); then
-		echo "Svn version : $(svn info | awk '/^Revision:/ {print $NF}')" >> gui/help/version.html
-	fi
+		vcs=$(../../get_version.sh vcs)
+		githash=$(../../get_version.sh githash)
+		
+		echo "VCS: $vcs" >> gui/help/version.html
+		if [ "$vcs" == "git" ]; then
+			echo "Git Hash : $githash" >> gui/help/version.html
+		fi
+		echo "Revision Number: $version" >> gui/help/version.html
 	date >> gui/help/version.html
 	echo "" >> gui/help/version.html
 	echo "" >> gui/help/version.html
