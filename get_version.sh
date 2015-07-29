@@ -1,8 +1,10 @@
 #!/bin/bash
 
-#note - though a single number is currently rather misleading
-#a version numer for approx human reading is nice
-version=$(($(git rev-list --count HEAD)+8613-2391))
+#get date in int-like format YYYYMMDD
+version=$(git log -n 1 --date=short --pretty=format:' %ad '|sed 's/-//g')
+
+#version emulating SVN - unused
+#svn_emu_version=$(($(git rev-list --count HEAD)+8613-2391))
 #+8613-2391 to approx matchching SVN number on caves conversion
 
 githash=$(git log --format="%H" -n 1)
