@@ -37,8 +37,13 @@
 #include "gui/SoundManager.h"
 #include "gui/chat/ChatWidget.h"
 
-#include <opencv/cv.h>
 #include <speex/speex.h>
+
+#ifdef OPENCV2
+#include <opencv2/opencv.hpp>
+#else
+#include <opencv/cv.h>
+#endif
 
 #define IMAGE_VOIP ":/images/talking_on.svg"
 

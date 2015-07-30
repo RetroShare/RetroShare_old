@@ -1,5 +1,11 @@
+
+#ifdef OPENCV2
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#else
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#endif
 
 #include <QTimer>
 #include <QPainter>

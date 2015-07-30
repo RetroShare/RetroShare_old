@@ -21,6 +21,9 @@ INCLUDEPATH += ../../retroshare-gui/src/temp/ui ../../libretroshare/src
 linux-* {
 	INCLUDEPATH += /usr/include
 	LIBS += $$system(pkg-config --libs opencv)
+	exists(/usr/include/opencv2/opencv.hpp) {
+	    DEFINES += OPENCV2
+	}
 }
 
 win32 {
